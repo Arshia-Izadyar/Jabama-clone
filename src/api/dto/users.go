@@ -17,3 +17,7 @@ type UserResponse struct {
 	Password  string `json:"password"`
 	Activated bool   `json:"activated"`
 }
+
+type OtpRequest struct {
+	PhoneNumber string `json:"phone_number"`
+}

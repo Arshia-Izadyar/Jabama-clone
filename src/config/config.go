@@ -44,6 +44,11 @@ type RedisConfig struct {
 	PoolTimeout        int
 	IdleCheckFrequency int
 }
+type OtpConfig struct {
+	Digits     int
+	ExpireTime time.Duration
+	Limiter    time.Duration
+}
 
 type LoggerConfig struct {
 	FilePath string
