@@ -24,7 +24,7 @@ type UserResponse struct {
 }
 
 type OtpRequest struct {
-	PhoneNumber string `json:"phone_number"`
+	PhoneNumber string `json:"phone_number" binding:"phone"`
 }
 
 type OtpDto struct {

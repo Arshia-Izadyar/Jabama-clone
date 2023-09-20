@@ -13,3 +13,7 @@ type TokenDto struct {
 	Phone    string
 	Roles    []string
 }
+
+type RefreshTokenDTO struct {
+	RefreshToken string `json:"refreshToken"`
+}

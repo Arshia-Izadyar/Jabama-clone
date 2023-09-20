@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 
+	"github.com/Arshia-Izadyar/Jabama-clone/src/api/middleware"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/api/router"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/api/validators"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/config"
@@ -17,8 +18,9 @@ func Init(cfg *config.Config) {
 	log := logger.NewLogger(cfg)
 	r := gin.New()
 	r.Use(gin.Recovery(), gin.Logger())
-
+	r.Use(middleware.Limiter())
 	registerRoutes(r, cfg)
+	registerValidators()
 
 	log.Info(logger.General, logger.Startup, fmt.Sprintf("started listening on port %d", cfg.Server.Port), nil)
 	err := r.Run(fmt.Sprintf(":%d", cfg.Server.Port))

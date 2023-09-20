@@ -13,4 +13,5 @@ func UserRouter(r *gin.RouterGroup, cfg *config.Config) {
 	r.POST("/phone/signup", h.RegisterLoginByPhoneNumber)
 	r.POST("/phone/login", h.RegisterLoginByPhoneNumber)
 	r.POST("/otp", h.GetOtp)
+	r.POST("/refresh", h.RefreshToken)
 }

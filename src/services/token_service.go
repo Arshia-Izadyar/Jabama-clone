@@ -6,6 +6,9 @@ import (
 	"github.com/Arshia-Izadyar/Jabama-clone/src/api/dto"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/config"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/constants"
+	"github.com/Arshia-Izadyar/Jabama-clone/src/data/cache"
+	"github.com/Arshia-Izadyar/Jabama-clone/src/data/db"
+	"github.com/Arshia-Izadyar/Jabama-clone/src/data/models"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/pkg/logger"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/pkg/service_errors"
 	"github.com/golang-jwt/jwt/v4"
@@ -44,6 +47,7 @@ func (ts *TokenService) GenerateToken(req *dto.TokenDto) (*dto.TokenDetail, erro
 
 	rtClaims := jwt.MapClaims{}
 	rtClaims[constants.UserIdKey] = req.UserId
+	rtClaims[constants.RefreshType] = true
 	rtClaims[constants.ExpKey] = accessTokeDetail.AccessTokenExpireTime
 
 	rTk := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
@@ -74,4 +78,70 @@ func (ts *TokenService) validateToken(token string) (*jwt.Token, error) {
 		}
 	}
 	return tk, nil
+}
+
+func (ts *TokenService) ValidateRefreshToken(req *dto.RefreshTokenDTO) (*dto.TokenDetail, error) {
+	tk, err := jwt.Parse(req.RefreshToken, func(t *jwt.Token) (interface{}, error) {
+
+		return []byte(ts.cfg.JWT.Secret), nil
+	})
+	if err != nil {
+		return nil, &service_errors.ServiceError{EndUserMessage: service_errors.TokenInvalid}
+	}
+	isBlackListed := isBlackList(req.RefreshToken)
+
+	claimMap := tk.Claims.(jwt.MapClaims)
+
+	if _, ok := claimMap[constants.RefreshType]; !ok {
+		return nil, &service_errors.ServiceError{EndUserMessage: service_errors.NotRefreshToken}
+	}
+
+	if !tk.Valid || isBlackListed {
+		return nil, &service_errors.ServiceError{EndUserMessage: service_errors.TokenInvalid}
+	}
+
+	tokenTime := claimMap[constants.ExpKey]
+	expTime := time.Unix(int64(tokenTime.(float64)), 0)
+	currTime := time.Now()
+	if currTime.After(expTime) {
+		return nil, &service_errors.ServiceError{EndUserMessage: service_errors.TokenExpired}
+	}
+
+	AddToBlacklist(req.RefreshToken, ts.cfg.JWT.RefreshTokenExpireDuration)
+
+	userId := claimMap[constants.UserIdKey]
+	var user models.User
+	db := db.GetDB()
+	err = db.Model(&models.User{}).Where("id = ?", userId).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	tDto := &dto.TokenDto{
+		UserId:   user.Id,
+		Username: user.Username,
+		Phone:    user.PhoneNumber,
+	}
+	if len(user.UserRoles) > 0 {
+		for _, r := range user.UserRoles {
+			tDto.Roles = append(tDto.Roles, r.Role.Name)
+		}
+	}
+	at, err := ts.GenerateToken(tDto)
+	if err != nil {
+		return nil, err
+	}
+	return at, nil
+}
+
+func isBlackList(rToken string) bool {
+	rds := cache.GetRedis()
+	_, err := cache.Get[bool](rToken, rds)
+	return err == nil
+}
+func AddToBlacklist(token string, ttl time.Duration) error {
+	err := cache.Set(token, true, ttl*time.Minute)
+	if err != nil {
+		return err
+	}
+	return nil
 }

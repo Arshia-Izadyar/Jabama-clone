@@ -55,7 +55,7 @@ func (uh *UserHandler) GetOtp(ctx *gin.Context) {
 	req := &dto.OtpRequest{}
 	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithErrorWithValidationError(-1, false, err))
 		return
 	}
 	err = uh.service.SendOtp(req)
@@ -71,7 +71,7 @@ func (uh *UserHandler) LoginByUsername(ctx *gin.Context) {
 	req := &dto.LoginByUserName{}
 	err := ctx.ShouldBindJSON(&req)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithErrorWithValidationError(-1, false, err))
 		return
 	}
 	res, err := uh.service.LoginByUserName(req)
@@ -81,4 +81,19 @@ func (uh *UserHandler) LoginByUsername(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, helper.GenerateResponse(res, 0, true))
 
+}
+
+func (uh *UserHandler) RefreshToken(ctx *gin.Context) {
+	req := dto.RefreshTokenDTO{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	tk, err := uh.service.Token.ValidateRefreshToken(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	ctx.JSON(http.StatusOK, helper.GenerateResponse(tk, 0, true))
 }

@@ -10,4 +10,5 @@ const (
 	PhoneKey        = "userPhone"
 	RolesKey        = "roles"
 	AccessType      = "access_token"
+	RefreshType     = "refresh_type"
 )
