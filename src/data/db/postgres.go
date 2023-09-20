@@ -38,7 +38,6 @@ func InitDB(cfg *config.Config) error {
 	db.SetMaxIdleConns(cfg.Postgres.MaxIdleConns)
 	db.SetMaxOpenConns(cfg.Postgres.MaxOpenConns)
 	db.SetConnMaxLifetime(cfg.Postgres.ConnMaxLifetime * time.Minute)
-	fmt.Println("ok")
 	log.Info(logger.Postgres, logger.Startup, "postgres started", nil)
 	return nil
 }
