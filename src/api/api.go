@@ -20,7 +20,7 @@ func Init(cfg *config.Config) {
 
 	registerRoutes(r, cfg)
 
-	log.Info(logger.General, logger.Startup, fmt.Sprintf("started listening on posrt %d", cfg.Server.Port), nil)
+	log.Info(logger.General, logger.Startup, fmt.Sprintf("started listening on port %d", cfg.Server.Port), nil)
 	err := r.Run(fmt.Sprintf(":%d", cfg.Server.Port))
 	if err != nil {
 		log.Fatal(logger.General, logger.Startup, err, nil)

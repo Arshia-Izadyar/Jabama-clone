@@ -48,7 +48,7 @@ func Set[T any](key string, value T, ttl time.Duration) error {
 	if err != nil {
 		return err
 	}
-	_, err = redisClient.Set(context.Background(), key, v, ttl).Result()
+	_, err = redisClient.Set(context.Background(), key, v, ttl*time.Minute).Result()
 	if err != nil {
 		return err
 	}
@@ -61,6 +61,6 @@ func Get[T any](key string, c *redis.Client) (*T, error) {
 	if err != nil {
 		return nil, err
 	}
-	json.Unmarshal([]byte(v), dest)
+	json.Unmarshal([]byte(v), &dest)
 	return &dest, nil
 }

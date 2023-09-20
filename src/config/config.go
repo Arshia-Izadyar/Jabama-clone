@@ -13,11 +13,20 @@ type Config struct {
 	Postgres PostgresConfig
 	Redis    RedisConfig
 	Logger   LoggerConfig
+	Otp      OtpConfig
+	JWT      JWTConfig
 }
 
 type ServerConfig struct {
 	Port    int
 	RunMode string
+}
+
+type JWTConfig struct {
+	Secret                     string
+	RefreshSecret              string
+	AccessTokenExpireDuration  time.Duration
+	RefreshTokenExpireDuration time.Duration
 }
 
 type PostgresConfig struct {

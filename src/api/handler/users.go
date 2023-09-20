@@ -35,3 +35,50 @@ func (uh *UserHandler) CreateUserByUsername(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusCreated, helper.GenerateResponse(map[string]string{"Status": "created"}, 0, true))
 }
+
+func (uh *UserHandler) RegisterLoginByPhoneNumber(ctx *gin.Context) {
+	req := &dto.RegisterLoginByPhone{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	res, err := uh.service.RegisterLoginByPhoneNumber(req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	ctx.JSON(http.StatusOK, helper.GenerateResponse(res, 0, true))
+}
+
+func (uh *UserHandler) GetOtp(ctx *gin.Context) {
+	req := &dto.OtpRequest{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	err = uh.service.SendOtp(req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	ctx.JSON(http.StatusOK, helper.GenerateResponse(map[string]string{"status": "sent"}, 0, true))
+
+}
+
+func (uh *UserHandler) LoginByUsername(ctx *gin.Context) {
+	req := &dto.LoginByUserName{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	res, err := uh.service.LoginByUserName(req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	ctx.JSON(http.StatusOK, helper.GenerateResponse(res, 0, true))
+
+}
