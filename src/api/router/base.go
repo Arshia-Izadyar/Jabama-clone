@@ -1,0 +1,16 @@
+package router
+
+import (
+	"github.com/Arshia-Izadyar/Jabama-clone/src/api/handler"
+	"github.com/Arshia-Izadyar/Jabama-clone/src/config"
+	"github.com/gin-gonic/gin"
+)
+
+
+func CityRouter(r *gin.RouterGroup, cfg *config.Config) {
+	h := handler.NewCityHandler(cfg)
+	r.POST("/", h.CreateCity)
+	r.GET("/:id", h.GetById)
+	r.PUT("/:id", h.UpdateCity)
+	r.DELETE("/:id", h.DeleteCity)
+}

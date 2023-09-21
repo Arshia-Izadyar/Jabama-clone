@@ -28,6 +28,8 @@ func createTables(db *gorm.DB) {
 	tables = addIfNotExists(db, &models.User{}, tables)
 	tables = addIfNotExists(db, &models.Role{}, tables)
 	tables = addIfNotExists(db, &models.UserRole{}, tables)
+	tables = addIfNotExists(db, &models.City{}, tables)
+	tables = addIfNotExists(db, &models.Province{}, tables)
 
 	err := db.Migrator().CreateTable(tables...)
 	if err != nil {

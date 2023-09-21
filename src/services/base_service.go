@@ -70,7 +70,7 @@ func (bs *BaseService[T, Tu, Tc, Tr]) Create(ctx context.Context, req *Tc) (*Tr,
 		return nil, err
 	}
 	tx := bs.DB.WithContext(ctx).Begin()
-	err = tx.Create(model).Error
+	err = tx.Create(&model).Error
 	if err != nil {
 		tx.Rollback()
 		bs.Log.Error(logger.Postgres, logger.Insert, err, nil)

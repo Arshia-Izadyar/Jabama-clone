@@ -38,6 +38,9 @@ func registerRoutes(r *gin.Engine, cfg *config.Config) {
 	// users
 	users := v1.Group("/users")
 	router.UserRouter(users, cfg)
+
+	cities := v1.Group("/city", middleware.Authentication(cfg))
+	router.CityRouter(cities, cfg)
 }
 
 func registerValidators() {

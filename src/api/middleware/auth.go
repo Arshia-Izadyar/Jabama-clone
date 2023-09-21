@@ -30,10 +30,10 @@ func Authentication(cfg *config.Config) gin.HandlerFunc {
 				if isServiceError && e.EndUserMessage == service_errors.TokenExpired {
 					ctx.AbortWithStatusJSON(http.StatusUnauthorized, helper.GenerateResponseWithError(nil, -1, false, err))
 					return
-				}
-			} else {
-				ctx.AbortWithStatusJSON(http.StatusUnauthorized, helper.GenerateResponseWithError(nil, -1, false, err))
-				return
+				}else {
+					ctx.AbortWithStatusJSON(http.StatusUnauthorized, helper.GenerateResponseWithError(nil, -1, false, err))
+					return
+			} 
 			}
 
 		}
