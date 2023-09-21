@@ -21,4 +21,6 @@ func ProvinceRouter(r *gin.RouterGroup, cfg *config.Config) {
 	r.GET("/:id", h.GetById)
 	r.PUT("/:id", h.UpdateProvince)
 	r.DELETE("/:id", h.DeleteProvince)
+	r.POST("/filter", h.GetByFilter)
+
 }

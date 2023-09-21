@@ -42,9 +42,11 @@ func registerRoutes(r *gin.Engine, cfg *config.Config) {
 	cities := v1.Group("/city", middleware.Authentication(cfg))
 	router.CityRouter(cities, cfg)
 
-
 	Provinces := v1.Group("/province", middleware.Authentication(cfg))
 	router.ProvinceRouter(Provinces, cfg)
+
+	residence := v1.Group("/residence", middleware.Authentication(cfg))
+	router.ResidenceRouter(residence, cfg)
 }
 
 func registerValidators() {

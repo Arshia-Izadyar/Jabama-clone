@@ -10,16 +10,14 @@ import (
 	"github.com/Arshia-Izadyar/Jabama-clone/src/pkg/logger"
 )
 
-
-
 type ProvinceService struct {
 	base *BaseService[models.Province, dto.UpdateProvinceRequest, dto.CreateProvinceRequest, dto.ProvinceResponse]
 }
 
-func NewProvinceService(cfg *config.Config) *ProvinceService{
+func NewProvinceService(cfg *config.Config) *ProvinceService {
 	base := &BaseService[models.Province, dto.UpdateProvinceRequest, dto.CreateProvinceRequest, dto.ProvinceResponse]{
-		DB:       db.GetDB(),
-		Log:      logger.NewLogger(cfg),
+		DB:  db.GetDB(),
+		Log: logger.NewLogger(cfg),
 	}
 	return &ProvinceService{
 		base: base,
@@ -38,7 +36,10 @@ func (cs *ProvinceService) CreateProvince(ctx context.Context, req *dto.CreatePr
 	return cs.base.Create(ctx, req)
 }
 
-func (cs *ProvinceService) DeleteProvince(ctx context.Context, id int) (error) {
+func (cs *ProvinceService) DeleteProvince(ctx context.Context, id int) error {
 	return cs.base.Delete(ctx, id)
 }
 
+func (cs *ProvinceService) GetProvinceByFilter(ctx context.Context, req *dto.PaginationInputWithFilter) (*dto.PageList[dto.ProvinceResponse], error) {
+	return cs.base.GetByFilter(ctx, req)
+}
