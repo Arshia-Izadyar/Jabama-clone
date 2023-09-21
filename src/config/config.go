@@ -15,8 +15,11 @@ type Config struct {
 	Logger   LoggerConfig
 	Otp      OtpConfig
 	JWT      JWTConfig
+	Cors CorseConfig
 }
-
+type CorseConfig struct {
+	AllowOrigins string
+}
 type ServerConfig struct {
 	Port    int
 	RunMode string

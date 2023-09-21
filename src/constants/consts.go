@@ -11,4 +11,5 @@ const (
 	RolesKey        = "roles"
 	AccessType      = "access_token"
 	RefreshType     = "refresh_type"
+	AuthenticationKey = "Authentication"
 )

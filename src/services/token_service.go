@@ -80,6 +80,24 @@ func (ts *TokenService) validateToken(token string) (*jwt.Token, error) {
 	return tk, nil
 }
 
+
+func (ts *TokenService)GetClaims(token string) (map[string]interface{}, error) {
+	claimMap := map[string]interface{}{}
+	verification, err := ts.validateToken(token)
+	if err != nil {
+		return nil, err
+	}
+	claims, ok := verification.Claims.(jwt.MapClaims) 
+	if ok && verification.Valid {
+		for k, v := range claims{
+			claimMap[k] = v
+		}
+		return claimMap, nil
+	}
+	return nil, &service_errors.ServiceError{EndUserMessage: service_errors.ClaimNotFound}
+}
+
+
 func (ts *TokenService) ValidateRefreshToken(req *dto.RefreshTokenDTO) (*dto.TokenDetail, error) {
 	tk, err := jwt.Parse(req.RefreshToken, func(t *jwt.Token) (interface{}, error) {
 
@@ -139,7 +157,7 @@ func isBlackList(rToken string) bool {
 	return err == nil
 }
 func AddToBlacklist(token string, ttl time.Duration) error {
-	err := cache.Set(token, true, ttl*time.Minute)
+	err := cache.Set(token, true, ttl)
 	if err != nil {
 		return err
 	}

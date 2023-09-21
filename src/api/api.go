@@ -17,8 +17,9 @@ import (
 func Init(cfg *config.Config) {
 	log := logger.NewLogger(cfg)
 	r := gin.New()
-	r.Use(gin.Recovery(), gin.Logger())
+	r.Use(gin.Recovery(), middleware.CustomLogger(log))
 	r.Use(middleware.Limiter())
+	r.Use(middleware.Cors(cfg))
 	registerRoutes(r, cfg)
 	registerValidators()
 
