@@ -79,11 +79,11 @@ func (bs *BaseService[T, Tu, Tc, Tr]) Create(ctx context.Context, req *Tc) (*Tr,
 		bs.Log.Error(logger.Postgres, logger.Insert, err, nil)
 		return nil, err
 	}
-	tx.Commit()
 	res, err := common.TypeConvert[models.BaseModel](model)
 	if err != nil {
 		return nil, err
 	}
+	tx.Commit()
 	return bs.GetById(&ctx, res.Id)
 }
 

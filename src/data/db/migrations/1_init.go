@@ -27,12 +27,15 @@ func createTables(db *gorm.DB) {
 	tables = addIfNotExists(db, &models.BaseModel{}, tables)
 	tables = addIfNotExists(db, &models.User{}, tables)
 	tables = addIfNotExists(db, &models.Role{}, tables)
+	tables = addIfNotExists(db, &models.RoomType{}, tables)
 	tables = addIfNotExists(db, &models.UserRole{}, tables)
 	tables = addIfNotExists(db, &models.City{}, tables)
 	tables = addIfNotExists(db, &models.Province{}, tables)
 	tables = addIfNotExists(db, &models.Residence{}, tables)
-	tables = addIfNotExists(db, &models.RoomType{}, tables)
 	tables = addIfNotExists(db, &models.ResidenceComment{}, tables)
+	tables = addIfNotExists(db, &models.PropertyCategory{}, tables)
+	tables = addIfNotExists(db, &models.Property{}, tables)
+	tables = addIfNotExists(db, &models.ResidenceProperty{}, tables)
 
 	err := db.Migrator().CreateTable(tables...)
 	if err != nil {

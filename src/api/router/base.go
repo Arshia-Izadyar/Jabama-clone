@@ -24,3 +24,22 @@ func ProvinceRouter(r *gin.RouterGroup, cfg *config.Config) {
 	r.POST("/filter", h.GetByFilter)
 
 }
+
+func PropertyCategoryRouter(r *gin.RouterGroup, cfg *config.Config) {
+	h := handler.NewPropertyCategoryHandler(cfg)
+	r.POST("/", h.CreatePropertyCategory)
+	r.GET("/:id", h.GetById)
+	r.PUT("/:id", h.UpdatePropertyCategory)
+	r.DELETE("/:id", h.DeletePropertyCategory)
+	r.POST("/filter", h.GetByFilter)
+}
+
+func PropertyRouter(r *gin.RouterGroup, cfg *config.Config) {
+	h := handler.NewPropertyHandler(cfg)
+	r.POST("/", h.CreateProperty)
+	r.GET("/:id", h.GetById)
+	r.PUT("/:id", h.UpdateProperty)
+	r.DELETE("/:id", h.DeleteProperty)
+	r.POST("/filter", h.GetByFilter)
+
+}

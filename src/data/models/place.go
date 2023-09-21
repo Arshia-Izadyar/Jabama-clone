@@ -15,7 +15,10 @@ Residence {
 */
 
 type Residence struct {
+	//TODO: add rating
 	BaseModel
+	Owner               User `gorm:"foreignKey:OwnerId;constraint:OnDelete:NO ACTION"`
+	OwnerId             int
 	Name                string  `gorm:"type:string;size:100;not null"`
 	Description         string  `gorm:"type:string;size:1500"`
 	Available           bool    `gorm:"default:true"`
@@ -27,28 +30,26 @@ type Residence struct {
 	CityId              int
 	Province            Province `gorm:"foreignKey:ProvinceId;constraint:OnDelete:NO ACTION"`
 	ProvinceId          int
-	ResidenceRoom       []ResidenceRoom
+	RoomType            RoomType `gorm:"foreignKey:RoomTypeId;constraint:OnDelete:NO ACTION"`
+	RoomTypeId          int
 	ResidenceComment    []ResidenceComment
+	ResidenceProperties []ResidenceProperty
 }
 
 type RoomType struct {
 	BaseModel
-	RoomCount    int    `gorm:"not null"`
-	Type         string `gorm:"type:string;not null"`
-	BedType      string `gorm:"type:string;not null"`
-	HasShower    bool   `gorm:"default:false"`
-	HasBalcony   bool   `gorm:"default:false"`
-	HasPool      bool   `gorm:"default:false"`
-	HasGameRoom  bool   `gorm:"default:false"`
-	HasFurniture bool   `gorm:"default:false"`
+	RoomCount int    `gorm:"not null"`
+	Type      string `gorm:"type:string;not null"`
+	BedType   string `gorm:"type:string;not null"`
 }
 
-type ResidenceRoom struct {
+type ResidenceProperty struct {
 	BaseModel
 	Residence   Residence `gorm:"foreignKey:ResidenceId;constraint:OnDelete:CASCADE"`
 	ResidenceId int
-	RoomType    RoomType `gorm:"foreignKey:RoomTypeId;constraint:OnDelete:NO ACTION"`
-	RoomTypeId  int
+	Property    Property `gorm:"foreignKey:PropertyId;constraint:OnDelete:NO ACTION"`
+	PropertyId  int
+	Value       string `gorm:"size:100;type:string;not null"`
 }
 
 type ResidenceComment struct {

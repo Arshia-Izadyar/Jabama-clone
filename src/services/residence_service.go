@@ -21,6 +21,9 @@ func NewResidenceService(cfg *config.Config) *ResidenceService {
 		Preloads: []preload{
 			{name: "City"},
 			{name: "Province"},
+			{name: "RoomType"},
+			{name: "ResidenceComment.User"},
+			{name: "ResidenceProperties.Property.Category"},
 		},
 	}
 	return &ResidenceService{
