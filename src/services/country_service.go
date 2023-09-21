@@ -10,12 +10,11 @@ import (
 	"github.com/Arshia-Izadyar/Jabama-clone/src/pkg/logger"
 )
 
-
 type CountryService struct {
 	base *BaseService[models.City, dto.UpdateCityRequest, dto.CreateCityRequest, dto.CityResponse]
 }
 
-func NewCountryService(cfg *config.Config) *CountryService{
+func NewCountryService(cfg *config.Config) *CountryService {
 	base := &BaseService[models.City, dto.UpdateCityRequest, dto.CreateCityRequest, dto.CityResponse]{
 		DB:       db.GetDB(),
 		Log:      logger.NewLogger(cfg),
@@ -38,7 +37,10 @@ func (cs *CountryService) CreateCity(ctx context.Context, req *dto.CreateCityReq
 	return cs.base.Create(ctx, req)
 }
 
-func (cs *CountryService) DeleteCity(ctx context.Context, id int) (error) {
+func (cs *CountryService) DeleteCity(ctx context.Context, id int) error {
 	return cs.base.Delete(ctx, id)
 }
 
+func (cs *CountryService) GetCityByFilter(ctx context.Context, req *dto.PaginationInputWithFilter) (*dto.PageList[dto.CityResponse], error) {
+	return cs.base.GetByFilter(ctx, req)
+}

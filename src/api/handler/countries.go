@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 type CityHandler struct {
 	service *services.CountryService
 }
@@ -89,4 +88,8 @@ func (ch *CityHandler) DeleteCity(ctx *gin.Context) {
 	// }
 	// ctx.JSON(http.StatusNoContent, helper.GenerateResponse(map[string]string{"status":"Deleted"}, 0, true))
 	Delete(ctx, ch.service.DeleteCity)
+}
+
+func (ch *CityHandler) GetByFilter(ctx *gin.Context) {
+	GetByFilter[dto.PaginationInputWithFilter, dto.CityResponse](ctx, ch.service.GetCityByFilter)
 }
