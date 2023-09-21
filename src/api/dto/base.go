@@ -7,8 +7,8 @@ type CreateCityRequest struct {
 
 type CityResponse struct {
 	Id int `json:"id"`
-	Provinces []ProvinceResponse `json:"provinces,omitempty"`
 	Name string `json:"name"`
+	Provinces []ProvinceResponse `json:"provinces,omitempty"`
 }
 
 

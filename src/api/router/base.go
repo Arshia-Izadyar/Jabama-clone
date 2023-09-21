@@ -14,3 +14,13 @@ func CityRouter(r *gin.RouterGroup, cfg *config.Config) {
 	r.PUT("/:id", h.UpdateCity)
 	r.DELETE("/:id", h.DeleteCity)
 }
+
+
+
+func ProvinceRouter(r *gin.RouterGroup, cfg *config.Config) {
+	h := handler.NewProvinceHandler(cfg)
+	r.POST("/", h.CreateProvince)
+	r.GET("/:id", h.GetById)
+	r.PUT("/:id", h.UpdateProvince)
+	r.DELETE("/:id", h.DeleteProvince)
+}
