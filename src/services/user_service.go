@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"database/sql"
 
 	"golang.org/x/crypto/bcrypt"
@@ -239,4 +240,33 @@ func (us *UserService) LoginByUserName(req *dto.LoginByUserName) (*dto.TokenDeta
 	}
 	return tk, nil
 
+}
+
+func (us *UserService) ShowUser(ctx context.Context) (*dto.UserResponse, error) {
+	id := int64(ctx.Value(constants.UserIdKey).(float64))
+	var user models.User
+	db := us.DB.Preload("UserWishList")
+	err := db.Model(&user).Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	res := &dto.UserResponse{
+		Id:        user.Id,
+		Username:  user.Username,
+		Email:     user.Email.String,
+		FirstName: user.FirstName.String,
+		LastName:  user.LastName.String,
+		Activated: user.Activated,
+	}
+
+	if len(user.UserWishList) > 0 {
+		for _, w := range user.UserWishList {
+			res.UserWishList = append(res.UserWishList, dto.UserWishListResponse{
+				UserId:      w.UserId,
+				ResidenceId: w.ResidenceId,
+			})
+		}
+	}
+
+	return res, nil
 }

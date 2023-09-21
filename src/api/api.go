@@ -64,6 +64,9 @@ func registerRoutes(r *gin.Engine, cfg *config.Config) {
 
 	residenceProperty := v1.Group("/residence-property", middleware.Authentication(cfg))
 	router.ResidencePropertyRouter(residenceProperty, cfg)
+
+	wishList := v1.Group("/wishlist", middleware.Authentication(cfg))
+	router.UserWishListRouter(wishList, cfg)
 }
 
 func registerValidators() {

@@ -102,7 +102,6 @@ func (uh *UserHandler) RefreshToken(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, helper.GenerateResponse(tk, 0, true))
 }
 
-
 func (uh *UserHandler) Logout(ctx *gin.Context) {
 	tk := ctx.GetHeader(constants.AuthenticationKey)
 	token := strings.Split(tk, " ")
@@ -115,5 +114,15 @@ func (uh *UserHandler) Logout(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
 		return
 	}
-	ctx.JSON(http.StatusTeapot, helper.GenerateResponse(map[string]string{"Status":"logged Out"}, 0, true))
+	ctx.JSON(http.StatusTeapot, helper.GenerateResponse(map[string]string{"Status": "logged Out"}, 0, true))
+}
+
+func (uh *UserHandler) ShowProfile(ctx *gin.Context) {
+	res, err := uh.service.ShowUser(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	ctx.JSON(http.StatusOK, helper.GenerateResponse(res, 0, true))
+
 }

@@ -44,3 +44,10 @@ func ResidencePropertyRouter(r *gin.RouterGroup, cfg *config.Config) {
 	r.POST("/filter", h.GetByFilter)
 
 }
+
+func UserWishListRouter(r *gin.RouterGroup, cfg *config.Config) {
+	h := handler.NewUserWishListHandler(cfg)
+	r.POST("/", h.CreateUserWishList)
+	r.GET("/:id", h.GetById)
+	r.DELETE("/:id", h.DeleteUserWishList)
+}
