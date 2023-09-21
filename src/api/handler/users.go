@@ -1,11 +1,15 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/Arshia-Izadyar/Jabama-clone/src/api/dto"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/api/helper"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/config"
+	"github.com/Arshia-Izadyar/Jabama-clone/src/constants"
 	"github.com/Arshia-Izadyar/Jabama-clone/src/services"
 	"github.com/gin-gonic/gin"
 )
@@ -96,4 +100,20 @@ func (uh *UserHandler) RefreshToken(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, helper.GenerateResponse(tk, 0, true))
+}
+
+
+func (uh *UserHandler) Logout(ctx *gin.Context) {
+	tk := ctx.GetHeader(constants.AuthenticationKey)
+	token := strings.Split(tk, " ")
+	if len(token) != 2 {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, errors.New("invalid token")))
+		return
+	}
+	err := services.AddToBlacklist(token[1], uh.service.Otp.Cfg.JWT.AccessTokenExpireDuration*time.Minute)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, helper.GenerateResponseWithError(nil, -1, false, err))
+		return
+	}
+	ctx.JSON(http.StatusTeapot, helper.GenerateResponse(map[string]string{"Status":"logged Out"}, 0, true))
 }

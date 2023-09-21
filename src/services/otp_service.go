@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 
@@ -41,7 +42,7 @@ func (os *OtpService) SetOtp(mobile, otp string) *service_errors.ServiceError {
 	} else if err == nil && !res.Used {
 		return &service_errors.ServiceError{EndUserMessage: service_errors.OtpExists}
 	}
-	err = cache.Set[dto.OtpDto](key, *value, os.Cfg.Otp.ExpireTime)
+	err = cache.Set[dto.OtpDto](key, *value, os.Cfg.Otp.ExpireTime*time.Second)
 	if err != nil {
 		return &service_errors.ServiceError{EndUserMessage: "cant set otp"}
 	}
@@ -59,7 +60,7 @@ func (os *OtpService) ValidateOtp(phoneNumber, otp string) error {
 		return &service_errors.ServiceError{EndUserMessage: service_errors.OtpInvalid}
 	} else if !userOtp.Used && userOtp.Value == otp {
 		userOtp.Used = true
-		err = cache.Set[dto.OtpDto](fmt.Sprintf("%s:%s", constants.DefaultRedisKey, phoneNumber), *userOtp, os.Cfg.Otp.ExpireTime)
+		err = cache.Set[dto.OtpDto](fmt.Sprintf("%s:%s", constants.DefaultRedisKey, phoneNumber), *userOtp, os.Cfg.Otp.ExpireTime*time.Second)
 		if err != nil {
 			return err
 		}

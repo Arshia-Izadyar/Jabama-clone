@@ -48,7 +48,7 @@ func Set[T any](key string, value T, ttl time.Duration) error {
 	if err != nil {
 		return err
 	}
-	_, err = redisClient.Set(context.Background(), key, v, ttl*time.Minute).Result()
+	_, err = redisClient.Set(context.Background(), key, v, ttl).Result()
 	if err != nil {
 		return err
 	}

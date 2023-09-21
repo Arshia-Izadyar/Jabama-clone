@@ -125,7 +125,7 @@ func (ts *TokenService) ValidateRefreshToken(req *dto.RefreshTokenDTO) (*dto.Tok
 		return nil, &service_errors.ServiceError{EndUserMessage: service_errors.TokenExpired}
 	}
 
-	AddToBlacklist(req.RefreshToken, ts.cfg.JWT.RefreshTokenExpireDuration)
+	AddToBlacklist(req.RefreshToken, ts.cfg.JWT.RefreshTokenExpireDuration*time.Minute)
 
 	userId := claimMap[constants.UserIdKey]
 	var user models.User
