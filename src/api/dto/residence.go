@@ -107,3 +107,21 @@ type UserWishListResponse struct {
 	UserId      int `json:"userId"`
 	ResidenceId int `json:"residenceId"`
 }
+
+type CreateResidenceRateRequest struct {
+	Rate        int `json:"rate"`
+	ResidenceId int `json:"residenceId"`
+	UserId      int `json:"userId"`
+}
+
+type UpdateResidenceRateRequest struct {
+	Rate        int `json:"rate" binding:"required"`
+	ResidenceId int `json:"residenceId" binding:"required"`
+	UserId      int `json:"userId" binding:"required"`
+}
+
+type ResidenceRateResponse struct {
+	Rate        int          `json:"rate"`
+	ResidenceId int          `json:"residenceId"`
+	UserId      UserResponse `json:"userId"`
+}

@@ -63,9 +63,9 @@ type ResidenceComment struct {
 
 type ResidenceRate struct {
 	BaseModel
+	Rate        int
 	Residence   Residence `gorm:"foreignKey:ResidenceId;constraint:OnDelete:CASCADE"`
 	ResidenceId int
-	Rate        int
 	User        User `gorm:"foreignKey:UserId;constraint:onUpdate:NO ACTION;onDelete:NO ACTION;unique"`
 	UserId      int
 }
