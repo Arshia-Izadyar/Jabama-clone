@@ -24,20 +24,21 @@ type UpdateResidenceRequest struct {
 }
 
 type ResidenceResponse struct {
-	Id                  int
-	Name                string                      `json:"name"`
-	Description         string                      `json:"description"`
-	Available           bool                        `json:"available"`
-	MinReserveTime      int                         `json:"minReserveTime"`
-	Cap                 int                         `json:"cap"`
-	AddedPricePerPerson float64                     `json:"addedPricePerPerson"`
-	PricePerNight       float64                     `json:"pricePerNight"`
-	OwnerId             int                         `json:"ownerId"`
-	City                CityResponse                `json:"city"`
-	Province            ProvinceResponse            `json:"province"`
-	RoomType            RoomTypeResponse            `json:"roomType"`
-	ResidenceComment    []ResidenceCommentResponse  `json:"residenceComment"`
-	ResidenceProperties []ResidencePropertyResponse `json:"residenceProperties"`
+	Id                    int
+	Name                  string                      `json:"name"`
+	Description           string                      `json:"description"`
+	Available             bool                        `json:"available"`
+	MinReserveTime        int                         `json:"minReserveTime"`
+	Cap                   int                         `json:"cap"`
+	AddedPricePerPerson   float64                     `json:"addedPricePerPerson"`
+	PricePerNight         float64                     `json:"pricePerNight"`
+	OwnerId               int                         `json:"ownerId"`
+	City                  CityResponse                `json:"city"`
+	Province              ProvinceResponse            `json:"province"`
+	RoomType              RoomTypeResponse            `json:"roomType"`
+	ResidenceComment      []ResidenceCommentResponse  `json:"residenceComment"`
+	ResidenceProperties   []ResidencePropertyResponse `json:"residenceProperties"`
+	ResidenceRateResponse float64                     `json:"residenceRateResponse"`
 }
 
 type CreateRoomTypeRequest struct {
@@ -109,7 +110,7 @@ type UserWishListResponse struct {
 }
 
 type CreateResidenceRateRequest struct {
-	Rate        int `json:"rate"`
+	Rate        int `json:"rate" binding:"rate"`
 	ResidenceId int `json:"residenceId"`
 	UserId      int `json:"userId"`
 }
@@ -121,7 +122,8 @@ type UpdateResidenceRateRequest struct {
 }
 
 type ResidenceRateResponse struct {
-	Rate        int          `json:"rate"`
-	ResidenceId int          `json:"residenceId"`
-	UserId      UserResponse `json:"userId"`
+	Id          int `json:"id"`
+	Rate        int `json:"rate"`
+	ResidenceId int `json:"residenceId"`
+	UserId      int `json:"userId"`
 }

@@ -19,6 +19,7 @@ type Residence struct {
 	BaseModel
 	Owner               User `gorm:"foreignKey:OwnerId;constraint:OnDelete:NO ACTION"`
 	OwnerId             int
+	ResidenceAvgRate    int     `gorm:"null"`
 	Name                string  `gorm:"type:string;size:100;not null"`
 	Description         string  `gorm:"type:string;size:1500"`
 	Available           bool    `gorm:"default:true"`

@@ -67,11 +67,16 @@ func registerRoutes(r *gin.Engine, cfg *config.Config) {
 
 	wishList := v1.Group("/wishlist", middleware.Authentication(cfg))
 	router.UserWishListRouter(wishList, cfg)
+
+	rateRouter := v1.Group("/rate", middleware.Authentication(cfg))
+	router.ResidenceRateRouter(rateRouter, cfg)
+
 }
 
 func registerValidators() {
 	vld, ok := binding.Validator.Engine().(*validator.Validate)
 	if ok {
 		vld.RegisterValidation("phone", validators.IranPhoneNumberValidator, true)
+		vld.RegisterValidation("rate", validators.RateValidator, true)
 	}
 }

@@ -37,6 +37,7 @@ func createTables(db *gorm.DB) {
 	tables = addIfNotExists(db, &models.Property{}, tables)
 	tables = addIfNotExists(db, &models.ResidenceProperty{}, tables)
 	tables = addIfNotExists(db, &models.UserWishList{}, tables)
+	tables = addIfNotExists(db, &models.ResidenceRate{}, tables)
 
 	err := db.Migrator().CreateTable(tables...)
 	if err != nil {

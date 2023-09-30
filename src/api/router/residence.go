@@ -51,3 +51,12 @@ func UserWishListRouter(r *gin.RouterGroup, cfg *config.Config) {
 	r.GET("/:id", h.GetById)
 	r.DELETE("/:id", h.DeleteUserWishList)
 }
+
+func ResidenceRateRouter(r *gin.RouterGroup, cfg *config.Config) {
+	h := handler.NewResidenceRateHandler(cfg)
+	r.POST("/", h.CreateResidenceRate)
+	r.GET("/:id", h.GetById)
+	r.PUT("/:id", h.UpdateResidenceRate)
+	r.DELETE("/:id", h.DeleteResidenceRate)
+
+}
